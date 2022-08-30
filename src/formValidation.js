@@ -1,52 +1,59 @@
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { showToast, validateUserEmail, validateUserName } from './utils';
 
 const FormValidation = () => {
-    const initialValues = { FirstName: "", LastName: "", EmailAddress: "", PhoneNo: "", CNIC: "", ResidentialAddress: "" };
-    const [formValues, setFormValues] = useState(initialValues);
-    const [formErrors, setFromErrors] = useState({});
-    const [isSubmit, setIsSubmit] = useState(false)
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormValues({ ...formValues, [name]: value });
-    };
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setFromErrors(validate(formValues));
-        setIsSubmit(true);
-    };
-    useEffect(() => {
-        console.log(formErrors);
-        if (Object.keys(formErrors).length === 0 && isSubmit) {
-            console.log(formValues);
+    const[firstName, setfirstName]=useState('')
+    const[lastName, setlastname]=useState('')
+    const[emailAddres, setemailAddress]=useState('')
+    const[phoneno, setphoneno]=useState('')
+    const[password,setPassword]=useState('')
+    const[confirmPassword,setConfirmPassword]=useState('')
+    const [isLoading, setIsLoading] = useState(false)
+    
+    const btnAction = ()=>{
+        if (firstName === ""){
+            showToast("First Name is required.")
         }
-    }, [formErrors]);
-    const validate = (values) => {
-        const errors = {};
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-        if (!values.FirstName) {
-            errors.FirstName = 'First Name is required...';
+        else if (!validateUserName(firstName)) {
+            showToast('Enter only alphabets!')
         }
-        if (!values.LastName) {
-            errors.LastName = 'LAst Name is required...';
+        // else if (lastName === ""){
+        //     showToast("Last Name is required.")
+        // }
+        // else if (!validateUserName(lastName)) {
+        //     showToast('Enter only alphabets!')
+        // }
+        else if (emailAddres === ""){
+            showToast("email is required.")
         }
-        if (!values.EmailAddress) {
-            errors.EmailAddress = 'Email is required';
+        else if (!validateUserEmail(emailAddres)) {
+            showToast('Enter Valid Email!')
         }
-        if (!values.PhoneNo) {
-            errors.PhoneNo = 'Phone no is required';
+        // else if (phoneno === ""){
+        //     showToast("Phone no is required.")
+        // } 
+        // else if (phoneno.length < 11) {
+        //     showToast('Mobile Number is not Valid!')
+        // }
+        else if (password === ""){
+            showToast("Password is required.")
         }
-        if (!values.CNIC) {
-            errors.CNIC = 'Cnic is required';
+        else if (password.length < 8) {
+            showToast('Password should be at least 8 characters ')
         }
-        if (!values.ResidentialAddress) {
-            errors.ResidentialAddress = 'Address is required';
+        else if (confirmPassword === ""){
+            showToast("Confirm Password is required.")
         }
-        return errors;
-
+        else if (confirmPassword !== password) {
+            showToast('Password does not Matched!')
+        }
+        else {
+            setIsLoading(true)
+        }
     }
+   
     return (
 
         <View>
@@ -54,60 +61,66 @@ const FormValidation = () => {
                 <KeyboardAvoidingView>
                     <View style={{ marginBottom: 50 }}>
                         <View style={{ margin: 20, alignItems: 'center' }}>
-                            <Text style={{ textDecorationLine: 'underline', fontSize: 25, fontWeight: '700' }}>Form_Validation</Text>
+                            <Text style={{ textDecorationLine: 'underline', fontSize: 25, fontWeight: '700' }}>Form Validation</Text>
                         </View>
 
                         <View>
-                            <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}>FirstName:</Text>
+                            <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}> Name:</Text>
                             <TextInput
                                 placeholder='First Name'
+                                value={firstName}
+                                onChangeText={(text) => setfirstName(text)}
                                 style={{ marginHorizontal: 15, marginVertical: 10, borderColor: 'black', borderWidth: 1, width: '90%', borderRadius: 10 }}
-                                value={formValues.FirstName}
-                                onChange={handleChange}
+                                
                             />
-                            <Text style={{ color: 'black' }}>{formErrors.FirstName}</Text>
-                            <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}>LastName:</Text>
+                            
+                            {/* <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}>Last Name:</Text>
                             <TextInput
                                 placeholder='Last Name'
+                                value={lastName}
+                                onChangeText={(text) => setlastname(text)}
                                 style={{ marginHorizontal: 15, marginVertical: 10, borderColor: 'black', borderWidth: 1, width: '90%', borderRadius: 10 }}
-                                value={formValues.LastName}
-                                onChange={handleChange}
-                            />
-                            <Text>{formErrors.LastName}</Text>
-                            <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}>EmailAddress:</Text>
+                                
+                            /> */}
+                            
+                            <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}> Email:</Text>
                             <TextInput
                                 placeholder='Email Address'
+                                value={emailAddres}
+                                onChangeText={(text) => setemailAddress(text)}
                                 style={{ marginHorizontal: 15, marginVertical: 10, borderColor: 'black', borderWidth: 1, width: '90%', borderRadius: 10 }}
-                                value={formValues.EmailAddress}
-                                onChange={handleChange}
+                                
                             />
-                            <Text>{formErrors.EmailAddress}</Text>
-                            <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}>PhoneNo:</Text>
+                            
+                            {/* <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}>Phone No:</Text>
                             <TextInput
                                 maxLength={11}
                                 placeholder='Phone No'
+                                keyboardType={'numeric'}
+                                value={phoneno}
+                                onChangeText={(text) => setphoneno(text)}
                                 style={{ marginHorizontal: 15, marginVertical: 10, borderColor: 'black', borderWidth: 1, width: '90%', borderRadius: 10 }}
-                                value={formValues.PhoneNo}
-                                onChange={handleChange}
-                            />
-                            <Text>{formErrors.PhoneNo}</Text>
-                            <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}>CNIC:</Text>
+                                
+                            /> */}
+                            
+                            <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}> Password:</Text>
                             <TextInput
-                                maxLength={13}
-                                placeholder='Cnic'
+                                placeholder='Password'
+                                value={password}
+                                onChangeText={(text) => setPassword(text)}
                                 style={{ marginHorizontal: 15, marginVertical: 10, borderColor: 'black', borderWidth: 1, width: '90%', borderRadius: 10 }}
-                                value={formValues.CNIC}
-                                onChange={handleChange}
+                                
                             />
-                            <Text>{formErrors.CNIC}</Text>
-                            <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}>ResidentialAddress:</Text>
+                            
+                            <Text style={{ marginHorizontal: 15, fontSize: 20, fontWeight: '500' }}> Confirm Password:</Text>
                             <TextInput
-                                placeholder='Residential Address'
+                                placeholder='Confirm Password'
+                                value={confirmPassword}
+                                onChangeText={(text) => setConfirmPassword(text)}
                                 style={{ marginHorizontal: 15, marginVertical: 10, borderColor: 'black', borderWidth: 1, width: '90%', borderRadius: 10 }}
-                                value={formValues.ResidentialAddress}
-                                onChange={handleChange}
+                                
                             />
-                            <Text>{formErrors.ResidentialAddress}</Text>
+                            
 
                         </View>
                         <View style={{flexDirection:'row'}}>
@@ -121,11 +134,13 @@ const FormValidation = () => {
                             </Text>
                         </View>
 
-                        <View style={{ alignItems: 'center',marginTop:10}}>
-                            <TouchableOpacity style={{ borderRadius: 10, backgroundColor: 'skyblue', width: '70%', height: '25%' }}
-                                isSubmit={handleSubmit}
+                        <View style={{ alignItems: 'center',marginTop:20}}>
+                            <TouchableOpacity style={{ margin:30 ,borderRadius: 10, backgroundColor: 'skyblue', width: '70%', height: '25%' }}
+                                 onPress={() => {
+                                    btnAction()
+                                }}
                             >
-                                <Text style={{ textAlign: 'center', padding: 15, fontSize: 20, fontWeight: '600' }}>Submit</Text>
+                                <Text style={{ textAlign: 'center', padding: 15, fontSize: 20, fontWeight: '600' }}>Register</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
