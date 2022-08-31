@@ -1,5 +1,6 @@
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { showToast, validateUserEmail, validateUserName } from './utils';
 
@@ -10,8 +11,34 @@ const FormValidation = () => {
     const[phoneno, setphoneno]=useState('')
     const[password,setPassword]=useState('')
     const[confirmPassword,setConfirmPassword]=useState('')
-    const [isLoading, setIsLoading] = useState(false)
     
+     const postUser = () =>{
+         axios({
+            method: 'POST',
+            url: "https://cybexo.dev/cybexo360_0/api/register",
+            data:{
+                firstName:firstName,
+                emailAddres:emailAddres,
+                password:password,
+                password_confirmation:confirmPassword,
+            },
+            headers:{
+                Accept: 'application/json',
+            }
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            console.log('response',json)
+        })
+        .catch((error)=> {
+            console.log('error',error)
+        })
+     }
+
+     useEffect(()=>{
+               postUser();
+     },[])
+
     const btnAction = ()=>{
         if (firstName === ""){
             showToast("First Name is required.")
@@ -50,7 +77,7 @@ const FormValidation = () => {
             showToast('Password does not Matched!')
         }
         else {
-            setIsLoading(true)
+            showToast('Your data is entered.')
         }
     }
    
@@ -137,7 +164,7 @@ const FormValidation = () => {
                         <View style={{ alignItems: 'center',marginTop:20}}>
                             <TouchableOpacity style={{ margin:30 ,borderRadius: 10, backgroundColor: 'skyblue', width: '70%', height: '25%' }}
                                  onPress={() => {
-                                    btnAction()
+                                    btnAction(); postUser()
                                 }}
                             >
                                 <Text style={{ textAlign: 'center', padding: 15, fontSize: 20, fontWeight: '600' }}>Register</Text>

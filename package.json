@@ -10,8 +10,10 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "react": "17.0.2",
     "react-native": "0.68.2",
+    "react-native-axios": "^0.17.1",
     "react-native-bouncy-checkbox": "^3.0.2",
     "react-native-form-validator": "^0.1.3",
     "react-native-simple-toast": "^1.1.4"
