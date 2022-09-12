@@ -15,7 +15,7 @@ const FormValidation = () => {
      const postUser = () =>{
          axios({
             method: 'POST',
-            url: "https://cybexo.dev/cybexo360_0/api/register",
+            url: "API",
             data:{
                 firstName:firstName,
                 emailAddres:emailAddres,
@@ -164,11 +164,12 @@ const FormValidation = () => {
                         <View style={{ alignItems: 'center',marginTop:20}}>
                             <TouchableOpacity style={{ margin:30 ,borderRadius: 10, backgroundColor: 'skyblue', width: '70%', height: '25%' }}
                                  onPress={() => {
-                                    btnAction(); postUser()
+                                    btnAction(); 
                                 }}
                             >
                                 <Text style={{ textAlign: 'center', padding: 15, fontSize: 20, fontWeight: '600' }}>Register</Text>
                             </TouchableOpacity>
+                            <Text>Or</Text>
                         </View>
                     </View>
                 </KeyboardAvoidingView>
